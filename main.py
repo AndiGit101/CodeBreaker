@@ -25,8 +25,10 @@ def right(index):
     return alphabet[index:] + alphabet[:index]
 
 #==============================================#
+	
 
-# Encoding algorithms
+# ------Encoding algorithms------
+	
 def caesarShiftEncrypt(target_file1, choice):
     message = ""
 
@@ -54,8 +56,6 @@ def caesarShiftEncrypt(target_file1, choice):
 
                     message += str(key_alphabet.get(content[i]))
 
-            time.sleep(1)
-            print("Encrypted message is: " + message)
 
 
     elif choice == "decrypt":
@@ -83,8 +83,8 @@ def caesarShiftEncrypt(target_file1, choice):
 
                     message += str(key_alphabet.get(content[i]))
 
-        time.sleep(1)
-        print("Encrypted message\n" + message)
+    time.sleep(1)
+    print("Encrypted message\n" + message)
 
 
 
@@ -96,7 +96,9 @@ def ROTShift(target_file2, choice , shift):
 
     if choice == "encrypt":
 
+
         new_alpha = left(shift)
+
 
         # Append new items to the alphabet list
         for i in range(len(key_alphabet)):
@@ -118,8 +120,7 @@ def ROTShift(target_file2, choice , shift):
 
                     message += str(key_alphabet.get(content[i]))
 
-            time.sleep(1)
-            print("Encrypted message is: " + message)
+
 
 
     elif choice == "decrypt":
@@ -146,8 +147,56 @@ def ROTShift(target_file2, choice , shift):
 
                     message += str(key_alphabet.get(content[i]))
 
-        time.sleep(1)
-        print("Encrypted message\n" + message)
+
+
+    time.sleep(1)
+    print("Encrypted message\n" + message)
+
+
+
+
+def vignereCypherShift(target_file_3 , choice , key):
+
+        key_stream = ""#Repeated key
+        letters = ""#final message
+
+        #Read the content file
+        open_file = open(target_file_3, "r")
+        content = open_file.read()
+        open_file.close()  # Save memory
+
+
+        # Generate a the repeated key for encyrption
+        for i in range(len(content)):
+            key_stream += key[i % len(key)]
+
+
+
+
+        if choice == "encrypt":
+
+            for k in range(len(content)):
+                #UNICODE character calculations after letter A-Z
+                letters += chr(65 + ((ord(content[k]) + ord(key_stream[k])) % 26))##Start with the later A(formula for encryption of the sentence)
+
+
+
+        elif choice == "decrypt":
+
+            for k in range(len(content)):
+                #UNICODE character calculation after letter A-Z
+                letters += chr(65 + ((ord(content[k]) - ord(key_stream[k]))+ 26) % 26)#Decyption formula for decrypting the hidden sentence
+
+
+
+        print("Decrypted message:" + letters)
+
+
+
+
+
+
+
 
 
 
@@ -187,7 +236,21 @@ if __name__ == '__main__':
 
         elif type == 2:
 
-            caesarShiftEncrypt(file, "encrypt")
+            CAESAR_OPTION = int(input("Which Caesar shift would you like to perform?\n1:Normal Caesar\n2:Vignere "
+                                      "Shift\n"))
+
+            if CAESAR_OPTION == 1:
+
+                caesarShiftEncrypt(file, "encrypt")
+
+
+
+            elif CAESAR_OPTION == 2:
+
+                key = str(input("Enter a key for the encryption\n"))
+
+                vignereCypherShift(file, "encrypt", key)
+
 
 
 
@@ -219,4 +282,19 @@ if __name__ == '__main__':
 
         elif type == 2:
 
-            caesarShiftEncrypt(file, "decrypt")
+            CAESAR_OPTION = int(input("Which Caesar shift would you like to perform?\n1:Normal Caesar\n2:Vignere "
+                                      "Shift\n"))
+
+            if CAESAR_OPTION == 1:
+
+                caesarShiftEncrypt(file, "encrypt")
+
+
+
+            elif CAESAR_OPTION == 2:
+
+                key = str(input("Enter a key for the encryption\n"))
+
+                vignereCypherShift(file, "decrypt", key)
+
+
