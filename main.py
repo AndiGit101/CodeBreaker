@@ -28,19 +28,21 @@ def right(index):
 	
 
 # ------Encoding algorithms------
-	
-def caesarShiftEncrypt(target_file1, choice):
+
+#Caesar Shift function what will take a choice option by the user to encrypt or decrypt, shift default is 3.
+def caesarShift(target_file1, choice):
     message = ""
 
     if choice == "encrypt":
 
+		#Shift the alphabet 3 to the left to encrypt and set to the new alphabet to reference.
         new_alpha= left(3)
 
         # Append new items to the alphabet list
         for i in range(len(key_alphabet)):
             key_alphabet[alphabet[i]] = new_alpha[i]
 
-            # Perform file operation and read content to encrypt
+        # Perform file operation and read content to encrypt
         open_file = open(target_file1, "r")
         content = open_file.read()
         open_file.close()  # Save memory
@@ -60,7 +62,7 @@ def caesarShiftEncrypt(target_file1, choice):
 
     elif choice == "decrypt":
 
-
+		#Shift the alphabet 3 to the right to decrypt and set to the new alphabet to reference.
         new_alpha = right(3)
 
         # Append new items to the alphabet list
@@ -90,13 +92,13 @@ def caesarShiftEncrypt(target_file1, choice):
 
 
 
-
+#ROT function that will shift left or right depending on call
 def ROTShift(target_file2, choice , shift):
     message = ""
 
     if choice == "encrypt":
 
-
+		#Shift the alphabet the amount the user desires to the left to encrypt and set to the new alphabet to reference.
         new_alpha = left(shift)
 
 
@@ -104,7 +106,7 @@ def ROTShift(target_file2, choice , shift):
         for i in range(len(key_alphabet)):
             key_alphabet[alphabet[i]] = new_alpha[i]
 
-            # Perform file operation and read content to encrypt
+        # Perform file operation and read content to encrypt
         open_file = open(target_file2, "r")
         content = open_file.read()
         open_file.close()  # Save memory
@@ -121,10 +123,9 @@ def ROTShift(target_file2, choice , shift):
                     message += str(key_alphabet.get(content[i]))
 
 
-
-
     elif choice == "decrypt":
 
+		#Shift the alphabet the amount the user desires to the right to decrypt and set to the new alphabet to reference.
         new_alpha = right(shift)
 
         # Append new items to the alphabet list
@@ -154,7 +155,7 @@ def ROTShift(target_file2, choice , shift):
 
 
 
-
+#Vignere cypher alogorithm will use a key to encrypt or decrpyt a message. Takes a choice from the user to encrypt or decrypt.
 def vignereCypherShift(target_file_3 , choice , key):
 
         key_stream = ""#Repeated key
@@ -208,10 +209,12 @@ if __name__ == '__main__':
 
     encrypt_decrypt = int(input("Would you like to encrypt or decrypt?\n1:Encrypt\n2:Decrypt\n"))
 
+	#Encypt or decrypt option
     if encrypt_decrypt == 1:
 
         file = input("Enter a file to encrypt\n")
 
+		#Check if files exist
         while not os.path.exists(file):
             print("File doesnt exist")
             time.sleep(1)
@@ -219,6 +222,7 @@ if __name__ == '__main__':
 
         type = int(input("Encrypt with ROTx or Caesar shift?\n1:ROTX Encryption\n2:Caesar Encryption\n"))
 
+		#Type option for encyption
         if type == 1:
 
             ROT_OPTION = int(input("Which ROT function would you like to implement\n1:ROT13\n2:Custom\n"))
@@ -231,6 +235,7 @@ if __name__ == '__main__':
 
                 shift = int(input("Enter shift:\n"))
 
+				#Call rot encryption
                 ROTShift(file, "encrypt", shift)  # ROTX call tp encrypt
 
 
@@ -241,7 +246,8 @@ if __name__ == '__main__':
 
             if CAESAR_OPTION == 1:
 
-                caesarShiftEncrypt(file, "encrypt")
+				#Call casar shift function to encrypt
+                caesarShift(file, "encrypt")
 
 
 
@@ -249,11 +255,12 @@ if __name__ == '__main__':
 
                 key = str(input("Enter a key for the encryption\n"))
 
+				#Call vignere shift function to encrypt
                 vignereCypherShift(file, "encrypt", key)
 
 
 
-
+    #Whole script for decryption alogorithsm options by the user
     elif encrypt_decrypt == 2:
 
         file = input("Enter a file to decrypt\n")
@@ -287,7 +294,7 @@ if __name__ == '__main__':
 
             if CAESAR_OPTION == 1:
 
-                caesarShiftEncrypt(file, "encrypt")
+                caesarShift(file, "decrypt")
 
 
 
