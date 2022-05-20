@@ -3,7 +3,6 @@ import os.path
 import time
 
 ###########################
-
 # Standard key alphabet to manage encryption and decryptions
 key_alphabet = {"a": "a", "b": "b", "c": "c", "d": "d", "e": "e", "f": "f", "g": "g", "h": "h", "i": "i", "j": "j",
                 "k": "k", "l": "l", "m": "m", "n": "n", "o": "o", "p": "p", "q": "q", "r": "r", "s": "s", "t": "t",
@@ -25,8 +24,8 @@ def left(index):
 def right(index):
     return alphabet[index:] + alphabet[:index]
 
-
 # ==============================================#
+
 
 
 # ------Encoding algorithms------
@@ -35,6 +34,7 @@ def right(index):
 def caesarShift(target_file1, choice):
     message = ""
 
+    #Encrypt or decrypt depending on user input passed in
     if choice == "encrypt":
 
         # Shift the alphabet 3 to the left to encrypt and set to the new alphabet to reference.
@@ -60,6 +60,8 @@ def caesarShift(target_file1, choice):
 
                     message += str(key_alphabet.get(content[i]))
 
+            time.sleep(1)
+            print("Encrypted message\n" + message)
 
 
     elif choice == "decrypt":
@@ -87,13 +89,16 @@ def caesarShift(target_file1, choice):
 
                     message += str(key_alphabet.get(content[i]))
 
-    time.sleep(1)
-    print("Encrypted message\n" + message)
+        time.sleep(1)
+        print("Decrypted message\n" + message)
+
 
 
 # ROT function that will shift left or right depending on call
 def ROTShift(target_file2, choice, shift):
+
     message = ""
+
 
     if choice == "encrypt":
 
@@ -109,6 +114,7 @@ def ROTShift(target_file2, choice, shift):
         content = open_file.read()
         open_file.close()  # Save memory
 
+
         if content != "":
 
             for i in range(len(content)):
@@ -119,6 +125,9 @@ def ROTShift(target_file2, choice, shift):
                 else:
 
                     message += str(key_alphabet.get(content[i]))
+
+            time.sleep(1)
+            print("Encrypted message\n" + message)
 
 
     elif choice == "decrypt":
@@ -146,8 +155,8 @@ def ROTShift(target_file2, choice, shift):
 
                     message += str(key_alphabet.get(content[i]))
 
-    time.sleep(1)
-    print("Encrypted message\n" + message)
+        time.sleep(1)
+        print("Decrypted message\n" + message)
 
 
 # Vignere cypher alogorithm will use a key to encrypt or decrpyt a message. Takes a choice from the user to encrypt or decrypt.
@@ -160,37 +169,59 @@ def vignereCypherShift(target_file_3, choice, key):
     content = open_file.read()
     open_file.close()  # Save memory
 
-    # Generate a the repeated key for encyrption
+    # Generate the repeated key for encryption
     for i in range(len(content)):
         key_stream += key[i % len(key)]
+
+
 
     if choice == "encrypt":
 
         for k in range(len(content)):
             # UNICODE character calculations after letter A-Z
-            letters += chr(65 + ((ord(content[k]) + ord(
-                key_stream[k])) % 26))  ##Start with the later A(formula for encryption of the sentence)
 
+            if content[k] == " ":
+
+                letters += " "
+            else:
+                 letters += chr(ord('a') + ((ord(content[k]) + ord(
+                 key_stream[k])) % 26))  ##Start with the later A(formula for encryption of the sentence)
+
+        print("Encrypted message:" + letters)
 
 
     elif choice == "decrypt":
 
-        for k in range(len(content)):
-            # UNICODE character calculation after letter A-Z
-            letters += chr(65 + ((ord(content[k]) - ord(
-                key_stream[k])) + 26) % 26)  # Decyption formula for decrypting the hidden sentence
 
-    print("Decrypted message:" + letters)
+        for k in range(len(content)):
+
+            if content[k] == " ":
+                letters += " "
+
+            else:
+                # UNICODE character calculation after letter A-Z
+                letters += chr(ord('a') + ((ord(content[k]) - ord(
+                key_stream[k])) % 26))# Decyption formula for decrypting the hidden sentence
+
+
+        print("Decrypted message:" + letters)
+
+
+
+
+		
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
+    #Main message
     print("------File encrypted and decrypted------")
 
+    #Options
     encrypt_decrypt = int(input("Would you like to encrypt or decrypt?\n1:Encrypt\n2:Decrypt\n"))
 
-    # Encypt or decrypt option
+    # Encrypt or decrypt option
     if encrypt_decrypt == 1:
 
         file = input("Enter a file to encrypt\n")
@@ -203,7 +234,7 @@ if __name__ == '__main__':
 
         type = int(input("Encrypt with ROTx or Caesar shift?\n1:ROTX Encryption\n2:Caesar Encryption\n"))
 
-        # Type option for encyption
+        # Type option for encryption
         if type == 1:
 
             ROT_OPTION = int(input("Which ROT function would you like to implement\n1:ROT13\n2:Custom\n"))
@@ -227,18 +258,21 @@ if __name__ == '__main__':
 
             if CAESAR_OPTION == 1:
 
-                # Call casar shift function to encrypt
+                # Call caesar shift function to encrypt
                 caesarShift(file, "encrypt")
-
 
 
             elif CAESAR_OPTION == 2:
 
                 key = str(input("Enter a key for the encryption\n"))
 
+
+                while len(key) <=2:
+
+                    key = str(input("Key to short. Enter again. Must be greater than 2 characters.\n"))
+
                 # Call vignere shift function to encrypt
                 vignereCypherShift(file, "encrypt", key)
-
 
 
     # Whole script for decryption alogorithsm options by the user
@@ -277,11 +311,9 @@ if __name__ == '__main__':
 
                 caesarShift(file, "decrypt")
 
-
-
             elif CAESAR_OPTION == 2:
 
-                key = str(input("Enter a key for the encryption\n"))
+                key = str(input("Enter a key for the decryption\n"))
 
                 vignereCypherShift(file, "decrypt", key)
 
